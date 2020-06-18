@@ -19,13 +19,13 @@ print(' * Host : ', host)
 print(' * Port : ', port)
 
 
-from flask import Flask
+from flask import Flask, render_template
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
 
 
 @app.route('/')
 def index_view():
-    return "Hello World"
+    return render_template('index.html')
 
 if __name__ == "__main__":
     app.run(host=host, port=port, debug=True)

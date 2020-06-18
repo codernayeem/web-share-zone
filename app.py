@@ -27,5 +27,10 @@ app = Flask(__name__, instance_relative_config=False, static_folder='.static', t
 def index_view():
     return render_template('index.html')
 
+
+@app.route('/sharezone')
+def share_zone_view():
+    return render_template('share_zone.html')
+
 if __name__ == "__main__":
     app.run(host=host, port=port, debug=True)

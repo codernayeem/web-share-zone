@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <div class="container-fluid" style="padding: 0;">
+    <div class="container-fluid p-0 mb-2">
         <nav class="navbar navbar-expand-md bg-light navbar-light shadow">
             <a class="navbar-brand" href="/" style="font-size: 155%;">{% block nav_title %}Web Share Zone{% endblock %}</a>
 
@@ -28,15 +28,13 @@
                 </ul>
             </div>
         </nav>
-        <br />
     </div>
 
-    <div class="container-fluid main-container">
+    <div class="container-fluid p-2">
         {% block content %}
         {% endblock %}
     </div>
-    <br />
-    <div class="container-fluid" style="padding: 0;">
+    <div class="container-fluid p-0">
         <div class="jumbotron text-center" style="padding: 20px 15px; margin-bottom:0;">
             <p style="margin-bottom:0;"><b>Powered</b> by @ <b>Nayeem</b></p>
         </div>

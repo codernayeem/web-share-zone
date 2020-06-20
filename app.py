@@ -1,9 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from colorama import init, Fore, Back
+from datetime import datetime
 import socket, sys, config as cfg
 
 init()
@@ -65,6 +66,38 @@ def load_user(user_id):
     if user_id is not None:
         return User.query.get(user_id)
     return None
+
+
+def save_db(data):
+    db.session.add(data)
+    db.session.commit()
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login_page():
+    if current_user:
+        redirect('/')
+    if request.method == 'GET':
+        error = session.get('error_login')
+        if error:
+            session['error_login'] = None
+        return render_template('login.html', error=error)
+    
+    user = User.query.filter_by(username=request.form['username']).first()
+    if user:
+        if user.check_password(request.form['password']):
+            remember = False
+            if request.form.get('remember', None) == 'on':
+                remember = True
+            login_user(user, remember=remember)
+            user.last_login = datetime.now()
+            save_db(user)
+            return redirect('/')
+        session['error_login'] = 'Incorrect username or password'
+    else:
+        session['error_login'] = 'User not Found'
+    return redirect('/login')
+
 
 @app.route('/')
 def index_view():

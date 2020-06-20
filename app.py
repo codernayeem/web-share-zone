@@ -1,6 +1,5 @@
 import socket, sys
 from colorama import init, Fore, Back
-from tools import ShareZone
 
 init()
 host = socket.gethostbyname(socket.gethostname())
@@ -22,7 +21,7 @@ print(' * Port : ', port)
 
 from flask import Flask, render_template
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
-shareZone = ShareZone()
+
 
 @app.route('/')
 def index_view():
@@ -31,9 +30,8 @@ def index_view():
 
 @app.route('/sharezone')
 def share_zone_view():
-    global shareZone
-    fl_list = [i for i in shareZone.sharedFiles if not i['hidden']]
-    return render_template('share_zone.html', fl_list=fl_list, count=len(fl_list))
+
+    return render_template('share_zone.html', fl_list=[])
 
 if __name__ == "__main__":
     app.run(host=host, port=port, debug=True)

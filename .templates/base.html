@@ -22,9 +22,31 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
                 <ul class="nav nav-pills justify-content-center">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link">{{ current_user.get_name() }}</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" id="nav-home" href="{{ url_for('index_view') }}">Home</a>
+                        <a class="nav-link" id="nav-home" href="/">Home</a>
                     </li>
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.is_admin %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin">Admin</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" id="nav-logout" href="/logout">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="nav-signup" href="/signup">Sign Up</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>

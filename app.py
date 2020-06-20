@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template, redirect, request, session, Response
+from flask import Flask, Blueprint, render_template, redirect, request, session, Response, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -101,6 +101,13 @@ def login_page():
     else:
         session['error_login'] = 'User not Found'
     return redirect('/login')
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login_page'))
 
 
 @app.route('/')

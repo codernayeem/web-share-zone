@@ -21,6 +21,7 @@ print(' * Port : ', port)
 
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
@@ -28,6 +29,8 @@ app = Flask(__name__, instance_relative_config=False, static_folder='.static', t
 db = SQLAlchemy()
 app.config.from_object('config.Config')
 db.init_app(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 
 class User(UserMixin, db.Model):
@@ -56,6 +59,12 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
+
+@login_manager.user_loader
+def load_user(user_id):
+    if user_id is not None:
+        return User.query.get(user_id)
+    return None
 
 @app.route('/')
 def index_view():

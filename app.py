@@ -1,5 +1,10 @@
-import socket, sys, config as cfg
+from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from colorama import init, Fore, Back
+import socket, sys, config as cfg
 
 init()
 host = socket.gethostbyname(socket.gethostname())
@@ -19,11 +24,6 @@ print(' * Host : ', host)
 print(' * Port : ', port)
 
 
-from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
 
 db = SQLAlchemy()

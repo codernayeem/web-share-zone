@@ -75,7 +75,7 @@ def save_db(data):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    if current_user:
+    if current_user.is_authenticated:
         redirect('/')
     if request.method == 'GET':
         error = session.get('error_login')

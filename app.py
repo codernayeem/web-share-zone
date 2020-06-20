@@ -1,7 +1,9 @@
-from flask import Flask, render_template, redirect, request, session
+from flask import Flask, Blueprint, render_template, redirect, request, session, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_admin import Admin, AdminIndexView
+from flask_admin.contrib.sqla import ModelView
 
 from colorama import init, Fore, Back
 from datetime import datetime
@@ -54,6 +56,25 @@ def load_user(user_id):
 def save_db(data):
     db.session.add(data)
     db.session.commit()
+
+
+admin_bp = Blueprint('admin_bp', __name__)
+
+class MyModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin
+    def inaccessible_callback(self, name, **kwargs):
+        return Response(status=403)
+
+class MyAdminIndexView(AdminIndexView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin
+    def inaccessible_callback(self, name, **kwargs):
+        return Response(status=403)
+
+admin = Admin(app, name='Web Share Zone', template_mode='bootstrap3', index_view=MyAdminIndexView())
+admin.add_view(MyModelView(User, db.session))
+app.register_blueprint(admin_bp)
 
 
 @app.route('/login', methods=['GET', 'POST'])

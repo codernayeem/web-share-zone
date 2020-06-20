@@ -30,7 +30,7 @@ class User(UserMixin, db.Model):
     last_login = db.Column(db.DateTime, index=False, nullable=True)
 
     def get_name(self):
-        if not self.fullname:
+        if self.fullname:
             return self.fullname
         return self.username
 

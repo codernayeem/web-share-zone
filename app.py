@@ -8,23 +8,6 @@ from datetime import datetime
 import socket, sys, config as cfg
 
 init()
-host = socket.gethostbyname(socket.gethostname())
-port = 1999
-if len(sys.argv) == 2:
-    host = sys.argv[1]
-elif len(sys.argv) == 3:
-    if sys.argv[1] != '*':
-        host = sys.argv[1]
-    port = int(sys.argv[2])
-elif len(sys.argv) > 3:
-    print('\n[+] - Too Many Parameters')
-    exit(1)
-
-print(f'\n\t ****  WEB SHARE ZONE ****\n')
-print(' * Host : ', host)
-print(' * Port : ', port)
-
-
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
 
 db = SQLAlchemy()
@@ -110,4 +93,19 @@ def share_zone_view():
     return render_template('share_zone.html', fl_list=[])
 
 if __name__ == "__main__":
+    host = socket.gethostbyname(socket.gethostname())
+    port = 1999
+    if len(sys.argv) == 2:
+        host = sys.argv[1]
+    elif len(sys.argv) == 3:
+        if sys.argv[1] != '*':
+            host = sys.argv[1]
+        port = int(sys.argv[2])
+    elif len(sys.argv) > 3:
+        print('\n[+] - Too Many Parameters')
+        exit(1)
+
+    print(f'\n\t ****  WEB SHARE ZONE ****\n')
+    print(' * Host : ', host)
+    print(' * Port : ', port)
     app.run(host=host, port=port, debug=True)

@@ -62,6 +62,14 @@
         </div>
     </div>
 
+
+    <script>
+        var mainnav = "{% block activeNav %}{% endblock %}";
+        if (mainnav != "") {
+            document.getElementById(mainnav).classList.add("active");
+        }
+    </script>
+
     <script src="{{ url_for('static', filename='bootstrap/js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap/js/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>

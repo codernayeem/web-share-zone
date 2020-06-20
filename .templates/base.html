@@ -30,6 +30,16 @@
                     <li class="nav-item">
                         <a class="nav-link" id="nav-home" href="/">Home</a>
                     </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="nav-zone" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Zones </a>
+                        <div class="dropdown-menu" aria-labelledby="nav-zone">
+                            <a class="dropdown-item" href="/sharezone">Share Zone</a>
+                            <a class="dropdown-item" href="/downloadzone">Download Zone</a>
+                            <a class="dropdown-item" href="/uploadzone">Upload Zone</a>
+                        </div>
+                    </li>
+
                     {% if current_user.is_authenticated %}
                         {% if current_user.is_admin %}
                             <li class="nav-item">

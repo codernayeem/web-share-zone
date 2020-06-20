@@ -1,14 +1,20 @@
 import sys
 from app import db, app, User
 from getpass import getpass
+from datetime import datetime
 
 if len(sys.argv) > 1:
     if sys.argv[1] == 'init':
         with app.app_context() as app_cntxt:
             db.create_all()
         print('[+] - Database created')
-    if sys.argv[1] == 'createadmin':
-        print('[+] - Creating Admin ...')
+
+    if sys.argv[1] == 'createadmin' or sys.argv[1] == 'createuser':
+        if sys.argv[1] == 'createadmin':
+            print('[+] - Creating Admin ...')
+        else:
+            print('[+] - Creating a new User ...')
+            
         username = input('Username : ')
         print('[+] - Password will be hidden when you type.')
         password = getpass('Password : ')
@@ -25,7 +31,11 @@ if len(sys.argv) > 1:
                     user = User()
                     user.username = username
                     user.set_password(password)
-                    user.is_admin = True
+                    if sys.argv[1] == 'createadmin':
+                        user.is_admin = True
+                    else:
+                        user.is_admin = False
+                    user.created_on = datetime.now()
                     db.session.add(user)
                     db.session.commit()
                     print('[+] - User created => ', username)

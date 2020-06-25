@@ -7,13 +7,15 @@ import time, base64
 
 
 def create_folder(pth):
-    s = ''
-    for i in pth.split(sep):
-        s = join(s, i)
-        try:
-            Path(s).mkdir()
-        except:
-            pass
+    if pth:
+        pth = str(pth)
+        s = ''
+        for i in pth.split(sep):
+            s = join(s, i)
+            try:
+                Path(s).mkdir()
+            except:
+                pass
 
 
 def get_formatted_datetime(format):

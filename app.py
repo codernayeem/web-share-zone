@@ -10,7 +10,7 @@ from colorama import init, Fore, Back
 from datetime import datetime
 import socket, sys, config as cfg
 
-from tools import Path, join, create_folder, get_formatted_datetime, get_downloadzone_files
+from tools import Path, join, create_folder, get_formatted_datetime, get_downloadzone_files, encode64, decode64, sizeSince
 
 init()
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
@@ -20,6 +20,11 @@ app.config.from_object('config.Config')
 db.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+
+@app.context_processor
+def inject_common_data():
+    return dict(encode64=encode64, decode64=decode64, sizeSince=sizeSince)
 
 
 class User(UserMixin, db.Model):

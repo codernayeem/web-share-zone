@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block Title %}Signup | WSZ{% endblock %}
+
+{% block activeNav %}nav-signup{% endblock %}
+
+{% block style%}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card auth_card">
+            <div class="card-header auth_card-header">
+                <h3>Sign Up</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% if error %}
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        {{ error }}
+                    </div>
+                    {% endif %}
+                    {% if info %}
+                    <div class="alert alert-info alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        {{ info }}
+                    </div>
+                    {% endif %}
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Username</span>
+                        </div>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Username"
+                            required>
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Password</span>
+                        </div>
+                        <input id="password" name="password" maxlength="32" type="password" class="form-control"
+                            placeholder="Password" required>
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Full Name</span>
+                        </div>
+                        <input id="fullname" name="fullname" maxlength="32" type="text" class="form-control"
+                            placeholder="Full Name">
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Email</span>
+                        </div>
+                        <input id="email" name="email" maxlength="32" type="email" class="form-control"
+                            placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Sign Up" class="btn float-right login_btn">
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-center links">
+                    Already have an account?<a href="{{ url_for('login_page') }}">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

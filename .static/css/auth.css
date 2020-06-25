@@ -18,10 +18,6 @@
   background: rgba(0, 123, 255, 0.71) !important;
 }
 
-.auth_card-header h3 {
-  color: white;
-}
-
 .input-group-prepend span {
   background-color: #ffc312;
   color: black;
@@ -51,7 +47,6 @@ input:focus {
 }
 
 .login_btn:hover {
-  color: black;
   background-color: white;
 }
 

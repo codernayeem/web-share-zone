@@ -28,7 +28,7 @@
           <td colspan='1'></td>
           <td><a href="#" title="Open">{{ a_file.name }}</a></td>
           <td><a href="#" title="{{ a_file.name }}">Download</a></td>
-          <td>{{ a_file.size }} B</td>
+          <td>{{ sizeSince(a_file.size) }}</td>
           <td>{{ a_file.date_modified }}</td>
         </tr>
         {% endfor %}
@@ -38,7 +38,7 @@
         </tr>
         <tr>
           <td colspan="1"></td>
-          <td colspan="5"><span>Total: {{ total_size }} B in {{ total_count }} file{% if not total_count <= 1 %}s{% endif %}</span></td>
+          <td colspan="5"><span>Total: {{ sizeSince(total_size) }} in {{ total_count }} file{% if not total_count <= 1 %}s{% endif %}</span></td>
         </tr>
       </tbody>
     </table>

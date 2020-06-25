@@ -10,7 +10,7 @@ from colorama import init, Fore, Back
 from datetime import datetime
 import socket, sys, config as cfg
 
-from tools import Path, join, create_folder, get_formatted_datetime
+from tools import Path, join, create_folder, get_formatted_datetime, get_downloadzone_files
 
 init()
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
@@ -164,7 +164,8 @@ def downloadzone_view():
     if not current_user.is_authenticated:
         return redirect(url_for('login_page', next='/downloadzone'))
     
-    return 'Hello World'
+    files, total_size, sort, order = get_downloadzone_files(cfg.DOWNLOAD_ZONE_PATH)
+    return render_template('download_zone.html', fl_list=files, total_count=len(files), total_size=total_size)
 
 
 @app.route('/uploadzone')

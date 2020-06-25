@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+{% if error %}
+<div class="alert alert-danger alert-dismissible fade show">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ error }}
+</div>
+{% endif %}
+{% if info %}
+<div class="alert alert-success alert-dismissible fade show">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ info }}
+</div>
+{% endif %}
+
+<form method="POST" action="/upload_file" enctype="multipart/form-data">
+  <div class="wrapper_">
+    <div class="container_">
+      <h2 class="upload_text">Upload File</h2>
+      <div class="upload-container">
+        <input type="file" name="file" class="file-upload" required>
+      </div>
+      <p class="file-upload-text">Drag & Drop a file here or Choose</p>
+      <p class="file-upload-text" style="margin-top: -10px">Size Limit : {{ max_limit }} MB</p>
+      <input type="submit" value="Upload" class="btn btn-primary">
+    </div>
+  </div>
+</form>
+
+{% endblock %}

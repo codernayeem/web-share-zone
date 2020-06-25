@@ -30,8 +30,8 @@
         {% for a_file in fl_list %}
         <tr>
           <td colspan='1'></td>
-          <td><a href="#" title="Open">{{ a_file.name }}</a></td>
-          <td><a href="#" title="{{ a_file.name }}">Download</a></td>
+          <td><a title="Open">{{ a_file.name }}</a></td>
+          <td><a href="{{ url_for('downloadzone_download', fl=a_file.name) }}" title="{{ a_file.name }}">Download</a></td>
           <td>{{ sizeSince(a_file.size) }}</td>
           <td>{{ a_file.date_modified }}</td>
         </tr>

@@ -8,5 +8,6 @@ __pycache__/
 
 /UPLOADZONE
 /DOWNLOADZONE
+/SHAREZONE
 
 database.db

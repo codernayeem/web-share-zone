@@ -28,7 +28,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
     is_admin = db.Column(db.Boolean, index=False, nullable=False)
     username = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(200), primary_key=False, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
     fullname = db.Column(db.String(100), nullable=True)
     email = db.Column(db.String(40), nullable=True)
     created_on = db.Column(db.DateTime, index=False, nullable=True)

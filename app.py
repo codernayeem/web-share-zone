@@ -159,6 +159,14 @@ def share_zone_view():
     return render_template('share_zone.html', fl_list=[])
 
 
+@app.route('/downloadzone')
+def downloadzone_view():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login_page', next='/downloadzone'))
+    
+    return 'Hello World'
+
+
 @app.route('/uploadzone')
 def uploadzone_view():
     if not current_user.is_authenticated:

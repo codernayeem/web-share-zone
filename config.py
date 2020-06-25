@@ -3,6 +3,7 @@ DEBUG_MODE = True
 WSZ_VERSION = '1.0'
 MAX_CONTENT_LENGTH_IN_MB = 560
 UPLOAD_ZONE_PATH = 'UPLOADZONE'
+CAN_SIGNUP = True
 
 class Config:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + 'database.db'

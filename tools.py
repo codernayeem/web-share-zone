@@ -3,7 +3,15 @@ from os import listdir
 from os.path import join, sep, isfile, getctime, getsize
 from datetime import datetime
 from random import randint
-import time, base64
+import time, base64, config as cfg
+
+
+def get_icon(s):
+    s = str(s)
+    for k, v in cfg.file_type_icon.items():
+        if s.endswith(k):
+            return v
+    return cfg.default_file_icon
 
 
 def create_folder(pth):

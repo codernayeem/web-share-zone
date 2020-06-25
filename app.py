@@ -113,6 +113,19 @@ def logout():
     return redirect(url_for('login_page'))
 
 
+@app.route('/signup')
+def signup_page():
+    if request.method == 'GET':
+        error = session.get('signup_error')
+        if error:
+            session['signup_error'] = None
+        if not cfg.CAN_SIGNUP:
+            return render_template('signup.html', error = 'Signup system is currently not avaiable')
+        return render_template('signup.html', error=error)
+
+    return render_template('signup.html')
+
+
 @app.route('/')
 def index_view():
     return render_template('index.html')

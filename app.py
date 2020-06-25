@@ -2,12 +2,15 @@ from flask import Flask, Blueprint, render_template, redirect, request, session,
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils  import secure_filename
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 
 from colorama import init, Fore, Back
 from datetime import datetime
 import socket, sys, config as cfg
+
+from tools import Path, join, create_folder, get_formatted_datetime
 
 init()
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
@@ -122,18 +125,38 @@ def share_zone_view():
 
 
 @app.route('/uploadzone')
-def upload_view():
+def uploadzone_view():
     if not current_user.is_authenticated:
         return redirect(url_for('login_page', next='/uploadzone'))
     
-    error = session.get('upload_zone_error')
-    info = session.get('upload_zone_info')
+    error = session.get('uploadzone_error')
+    info = session.get('uploadzone_info')
     if error:
-        session['upload_zone_error'] = None
+        session['uploadzone_error'] = None
     if info:
-        session['upload_zone_info'] = None
+        session['uploadzone_info'] = None
 
     return render_template('upload_zone.html', error=error, info=info, max_limit=cfg.MAX_CONTENT_LENGTH_IN_MB)
+
+
+@app.route('/uploadzone', methods=['POST'])
+def uploadzone_upload():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login_page', next=url_for('uploadzone_view')))
+
+    fl = request.files.get('file')
+    if fl and fl.filename:
+        filename = secure_filename(fl.filename)
+        p = join(cfg.UPLOAD_ZONE_PATH, get_formatted_datetime('%d-%m-%Y %H-%M-%S'))
+        if not Path(p).exists():
+            create_folder(p)
+        fl.save(join(p, filename))
+        session['uploadzone_info'] = 'Uploaded Successfully'
+        return redirect(url_for('uploadzone_view'))
+
+    else:
+        session['uploadzone_error'] = 'Upload Failed. File not found'
+        return redirect(url_for('uploadzone_view'))
 
 
 if __name__ == "__main__":

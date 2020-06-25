@@ -120,6 +120,22 @@ def share_zone_view():
 
     return render_template('share_zone.html', fl_list=[])
 
+
+@app.route('/uploadzone')
+def upload_view():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login_page', next='/uploadzone'))
+    
+    error = session.get('upload_zone_error')
+    info = session.get('upload_zone_info')
+    if error:
+        session['upload_zone_error'] = None
+    if info:
+        session['upload_zone_info'] = None
+
+    return render_template('upload_zone.html', error=error, info=info, max_limit=cfg.MAX_CONTENT_LENGTH_IN_MB)
+
+
 if __name__ == "__main__":
     host = socket.gethostbyname(socket.gethostname())
     port = 1999

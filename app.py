@@ -83,7 +83,7 @@ app.register_blueprint(admin_bp)
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
     if current_user.is_authenticated:
-        redirect('/')
+        return redirect(request.args.get('next') or '/')
     if request.method == 'GET':
         error = session.get('error_login')
         if error:
@@ -99,7 +99,7 @@ def login_page():
             login_user(user, remember=remember)
             user.last_login = datetime.now()
             save_db(user)
-            return redirect('/')
+            return redirect(request.args.get('next') or '/')
         session['error_login'] = 'Incorrect username or password'
     else:
         session['error_login'] = 'User not Found'

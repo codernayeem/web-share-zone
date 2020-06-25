@@ -18,6 +18,13 @@ def create_folder(pth):
                 pass
 
 
+def is_valid_file(fl):
+    if fl:
+        p = Path(fl)
+        return p.exists() and p.is_file()
+    return False
+
+
 def get_formatted_datetime(format):
     return datetime.now().strftime(format)
 

@@ -34,9 +34,9 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="nav-zone" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Zones </a>
                         <div class="dropdown-menu" aria-labelledby="nav-zone">
-                            <a class="dropdown-item" href="/sharezone">Share Zone</a>
-                            <a class="dropdown-item" href="/downloadzone">Download Zone</a>
-                            <a class="dropdown-item" href="/uploadzone">Upload Zone</a>
+                            <a id="nav-child-1" class="dropdown-item" href="/sharezone">Share Zone</a>
+                            <a id="nav-child-2" class="dropdown-item" href="/downloadzone">Download Zone</a>
+                            <a id="nav-child-3" class="dropdown-item" href="/uploadzone">Upload Zone</a>
                         </div>
                     </li>
 
@@ -75,6 +75,10 @@
 
     <script>
         var mainnav = "{% block activeNav %}{% endblock %}";
+        if (mainnav != "") {
+            document.getElementById(mainnav).classList.add("active");
+        }
+        var mainnav = "{% block activeNavChlid %}{% endblock %}";
         if (mainnav != "") {
             document.getElementById(mainnav).classList.add("active");
         }

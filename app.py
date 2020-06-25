@@ -113,7 +113,7 @@ def logout():
     return redirect(url_for('login_page'))
 
 
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
 def signup_page():
     if request.method == 'GET':
         error = session.get('signup_error')
@@ -123,7 +123,29 @@ def signup_page():
             return render_template('signup.html', error = 'Signup system is currently not avaiable')
         return render_template('signup.html', error=error)
 
-    return render_template('signup.html')
+    if not cfg.CAN_SIGNUP:
+        return redirect(url_for('signup_page'))
+
+    email = request.form.get('email')
+    username = request.form.get('username')
+    fullname = request.form.get('fullname')
+    password = request.form.get('password')
+
+    user = User.query.filter_by(username=username).first()
+    if user:
+        session['signup_error'] = 'The username was already used'
+    elif not (username and password):
+        session['signup_error'] = 'Please, provide all information'
+    else:
+        new_user = User(is_admin=False, email=email, fullname=fullname, username=username)
+        new_user.set_password(password)
+        new_user.created_on = datetime.now()
+        save_db(new_user)
+
+        session['login_info'] = 'Signup Successfull'
+        return redirect(url_for('login_page'))
+        
+    return redirect(url_for('signup_page'))
 
 
 @app.route('/')

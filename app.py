@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template, redirect, request, session, Response, url_for
+from flask import Flask, Blueprint, render_template, redirect, request, session, Response, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,7 +10,7 @@ from colorama import init, Fore, Back
 from datetime import datetime
 import socket, sys, config as cfg
 
-from tools import Path, join, create_folder, get_formatted_datetime, get_downloadzone_files, encode64, decode64, sizeSince
+from tools import Path, join, create_folder, get_formatted_datetime, get_downloadzone_files, encode64, decode64, sizeSince, is_valid_file
 
 init()
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
@@ -171,6 +171,18 @@ def downloadzone_view():
     
     files, total_size, sort, order = get_downloadzone_files(cfg.DOWNLOAD_ZONE_PATH)
     return render_template('download_zone.html', fl_list=files, total_count=len(files), total_size=total_size)
+
+
+@app.route('/downloadzone/download')
+def downloadzone_download():
+    if not current_user.is_authenticated:
+        return Response(status=403)
+    fl = request.args.get('fl')
+
+    if fl and is_valid_file(join(cfg.DOWNLOAD_ZONE_PATH, fl)):
+        return send_from_directory(cfg.DOWNLOAD_ZONE_PATH, fl, as_attachment=True)
+
+    return Response(status=404)
 
 
 @app.route('/uploadzone')

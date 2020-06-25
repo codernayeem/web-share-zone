@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block activeNavChlid %}nav-child-2{% endblock %}
+
+{% block content %}
+
+<div>
+  {% if total_count <= 0 %}
+  <div class="alert alert-warning fade show">
+    <h5>No file found to show</h5>
+    <h6>Please, try again later</h6>
+  </div>
+  {% else %}
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <tbody>
+        <tr class="font-weight-bold">
+          <td colspan='1'></span></td>
+          <td>Name</td>
+          <td>Actions</td>
+          <td>Size</td>
+          <td>Last modified</td>
+        </tr>
+
+        {% for a_file in fl_list %}
+        <tr>
+          <td colspan='1'></td>
+          <td><a href="#" title="Open">{{ a_file.name }}</a></td>
+          <td><a href="#" title="{{ a_file.name }}">Download</a></td>
+          <td>{{ a_file.size }} B</td>
+          <td>{{ a_file.date_modified }}</td>
+        </tr>
+        {% endfor %}
+
+        <tr>
+          <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="1"></td>
+          <td colspan="5"><span>Total: {{ total_size }} B in {{ total_count }} file{% if not total_count <= 1 %}s{% endif %}</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

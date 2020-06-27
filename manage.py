@@ -9,7 +9,7 @@ if len(sys.argv) > 1:
             db.create_all()
         print('[+] - Database created')
 
-    if sys.argv[1] == 'createadmin' or sys.argv[1] == 'createuser':
+    elif sys.argv[1] == 'createadmin' or sys.argv[1] == 'createuser':
         if sys.argv[1] == 'createadmin':
             print('[+] - Creating Admin ...')
         else:

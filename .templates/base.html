@@ -30,6 +30,9 @@
         <a href="/login" class="mr-5 hover:text-gray-900">Login</a>
         <a href="/signup" class="mr-5 hover:text-gray-900">Sign Up</a>
         {% else %}
+        {% if current_user.is_admin %}
+        <a href="/admin" class="mr-5 hover:text-gray-900">Admin</a>
+        {% endif %}
         <a href="/logout" class="mr-5 hover:text-gray-900">Logout</a>
         {% endif %}
       </nav>
@@ -95,6 +98,11 @@
               <a href="/signup" class="text-gray-600 hover:text-gray-800">Sign Up</a>
             </li>
             {% else %}
+            {% if current_user.is_admin %}
+            <li>
+              <a href="/admin" class="text-gray-600 hover:text-gray-800">Admin Page</a>
+            </li>
+            {% endif %}
             <li>
               <a href="/logout" class="text-gray-600 hover:text-gray-800">Logout</a>
             </li>

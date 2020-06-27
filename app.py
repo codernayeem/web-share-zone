@@ -28,7 +28,7 @@ def inject_common_data():
 
 
 class User(UserMixin, db.Model):
-    __tablename__ = 'flask-users'
+    __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True, unique=True)
     is_admin = db.Column(db.Boolean, index=False, nullable=False)
@@ -82,6 +82,7 @@ class MyAdminIndexView(AdminIndexView):
 
 admin = Admin(app, name='Web Share Zone', template_mode='bootstrap3', index_view=MyAdminIndexView())
 admin.add_view(MyModelView(User, db.session))
+admin.add_view(MyModelView(ShareZone, db.session))
 app.register_blueprint(admin_bp)
 
 

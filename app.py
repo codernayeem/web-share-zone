@@ -38,6 +38,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(40), nullable=True)
     created_on = db.Column(db.DateTime, index=False, nullable=True)
     last_login = db.Column(db.DateTime, index=False, nullable=True)
+    ShareZone = db.relationship('ShareZone', backref='User', lazy=True)
 
     def get_name(self):
         if self.fullname:
@@ -52,6 +53,26 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+
+class ShareZone(db.Model):
+    __tablename__ = 'sharezone'
+
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    sharezone_id = db.Column(db.Integer, unique=True, nullable=False)
+    user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    password = db.Column(db.String(200), nullable=False)
+    hidden = db.Column(db.Boolean, nullable=False)
+    data_type = db.Column(db.String(200), nullable=False)
+    shared_data = db.Column(db.String(1000), nullable=False)
+    publish_date = db.Column(db.DateTime, index=False, nullable=True)
+    last_modify_date = db.Column(db.DateTime, index=False, nullable=True)
+
+    def check_password(self, password):
+        return self.password == password
+
+    def __repr__(self):
+        return '<ShareZone Item {}>'.format(self.id)
 
 
 @login_manager.user_loader
@@ -82,6 +103,7 @@ class MyAdminIndexView(AdminIndexView):
 
 admin = Admin(app, name='Web Share Zone', template_mode='bootstrap3', index_view=MyAdminIndexView())
 admin.add_view(MyModelView(User, db.session))
+admin.add_view(MyModelView(ShareZone, db.session))
 app.register_blueprint(admin_bp)
 
 

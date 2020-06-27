@@ -82,7 +82,6 @@ class MyAdminIndexView(AdminIndexView):
 
 admin = Admin(app, name='Web Share Zone', template_mode='bootstrap3', index_view=MyAdminIndexView())
 admin.add_view(MyModelView(User, db.session))
-admin.add_view(MyModelView(ShareZone, db.session))
 app.register_blueprint(admin_bp)
 
 

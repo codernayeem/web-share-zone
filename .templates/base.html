@@ -36,6 +36,9 @@
         <a href="/logout" class="mr-5 hover:text-gray-900">Logout</a>
         {% endif %}
       </nav>
+      {% if current_user.is_authenticated %}
+      <span class="inline-flex items-center bg-gray-100 py-1 px-3 rounded text-base mt-4 md:mt-0">{{ current_user.get_name() }}</span>
+      {% endif %}
     </div>
   </header>
 

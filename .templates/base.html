@@ -2,88 +2,107 @@
 <html>
 
 <head>
-    <title>{% block Title %}WSZ | Web Share Zone{% endblock %}</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='tailwind/tailwind.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base_style.css') }}">
-    {% block head %}
-    {% endblock %}
+  <title>{% block Title %}WSZ | Web Share Zone{% endblock %}</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='tailwind/tailwind.css') }}">
+  {% block head %}
+  {% endblock %}
 </head>
 
 <body>
-    <div class="container-fluid p-0 mb-2">
-        <nav class="navbar navbar-expand-md bg-light navbar-light shadow">
-            <a class="navbar-brand" href="/" style="font-size: 155%;">{% block nav_title %}Web Share Zone{% endblock %}</a>
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
-                <ul class="nav nav-pills justify-content-center">
-                    {% if current_user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link">{{ current_user.get_name() }}</a>
-                        </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" id="nav-home" href="/">Home</a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="nav-zone" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Zones </a>
-                        <div class="dropdown-menu" aria-labelledby="nav-zone">
-                            <a id="nav-child-1" class="dropdown-item" href="/sharezone">Share Zone</a>
-                            <a id="nav-child-2" class="dropdown-item" href="/downloadzone">Download Zone</a>
-                            <a id="nav-child-3" class="dropdown-item" href="/uploadzone">Upload Zone</a>
-                        </div>
-                    </li>
-
-                    {% if current_user.is_authenticated %}
-                        {% if current_user.is_admin %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/admin">Admin</a>
-                            </li>
-                        {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" id="nav-logout" href="/logout">Logout</a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="nav-signup" href="/signup">Sign Up</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </nav>
+  <header class="text-gray-700 body-font">
+    <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+      <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+        <span class="ml-3 text-xl">Web Share Zone</span>
+      </a>
+      <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
+        <a href="/" class="mr-5 hover:text-gray-900">Home</a>
+        {% if not current_user.is_authenticated %}
+        <a href="/login" class="mr-5 hover:text-gray-900">Login</a>
+        <a href="/signup" class="mr-5 hover:text-gray-900">Sign Up</a>
+        {% else %}
+        <a href="/logout" class="mr-5 hover:text-gray-900">Logout</a>
+        {% endif %}
+      </nav>
     </div>
+  </header>
 
-    <div class="container-fluid p-2">
-        {% block content %}
-        {% endblock %}
-    </div>
-    <div class="container-fluid p-0">
-        <div class="jumbotron text-center" style="padding: 20px 15px; margin-bottom:0;">
-            <p style="margin-bottom:0;"><b>Powered</b> by @ <b>Nayeem</b></p>
+  {% block content %}
+  {% endblock %}
+  
+  <footer class="text-gray-700 body-font">
+    <div class="container px-5 py-12 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-no-wrap flex-wrap flex-col">
+      <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
+        <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+          <span class="ml-3 text-xl">Web Share Zone</span>
+        </a>
+        <p class="mt-2 text-sm text-gray-500">The perfect place to share your files with others</p>
+      </div>
+      <div class="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 md:text-left text-center">
+        <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+          <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">ZONES</h2>
+          <nav class="list-none mb-10">
+            <li>
+              <a href="/sharezone" class="text-gray-600 hover:text-gray-800">Share Zone</a>
+            </li>
+            <li>
+              <a href="/downloadzone" class="text-gray-600 hover:text-gray-800">Download Zone</a>
+            </li>
+            <li>
+              <a href="/uploadzone" class="text-gray-600 hover:text-gray-800">Upload Zone</a>
+            </li>
+          </nav>
         </div>
+        <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+          <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">PAGES</h2>
+          <nav class="list-none mb-10">
+            <li>
+              <a href="/" class="text-gray-600 hover:text-gray-800">Home</a>
+            </li>
+            <li>
+              <a href="/features" class="text-gray-600 hover:text-gray-800">Features</a>
+            </li>
+          </nav>
+        </div>
+        <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+          <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">ABOUT</h2>
+          <nav class="list-none mb-10">
+            <li>
+              <a href="/about" class="text-gray-600 hover:text-gray-800">About Us</a>
+            </li>
+            <li>
+              <a href="/contact" class="text-gray-600 hover:text-gray-800">Contact</a>
+            </li>
+          </nav>
+        </div>
+        <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+          <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">AUTHENTICATIONS</h2>
+          <nav class="list-none mb-10">
+            {% if not current_user.is_authenticated %}
+            <li>
+              <a href="/login" class="text-gray-600 hover:text-gray-800">Login</a>
+            </li>
+            <li>
+              <a href="/signup" class="text-gray-600 hover:text-gray-800">Sign Up</a>
+            </li>
+            {% else %}
+            <li>
+              <a href="/logout" class="text-gray-600 hover:text-gray-800">Logout</a>
+            </li>
+            {% endif %}
+          </nav>
+        </div>
+      </div>
     </div>
-
-
-    <script>
-        var mainnav = "{% block activeNav %}{% endblock %}";
-        if (mainnav != "") {
-            document.getElementById(mainnav).classList.add("active");
-        }
-        var mainnav = "{% block activeNavChlid %}{% endblock %}";
-        if (mainnav != "") {
-            document.getElementById(mainnav).classList.add("active");
-        }
-    </script>
+    <div class="bg-gray-200">
+      <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+        <p class="text-gray-500 text-sm text-center sm:text-left">© 2020 web-share-zone —
+          <a rel="noopener noreferrer" class="text-gray-600 ml-1" target="_blank">@codernayeem</a>
+        </p>
+      </div>
+    </div>
+  </footer>
 
     <script src="{{ url_for('static', filename='bootstrap/js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap/js/popper.min.js') }}"></script>

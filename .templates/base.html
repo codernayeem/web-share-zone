@@ -6,6 +6,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{ url_for('static', filename='tailwind/tailwind.css') }}">
+  <script>
+    function show(elementId){
+      document.getElementById(elementId).style.display = 'block'
+    }
+    function hide(elementId){
+      document.getElementById(elementId).style.display = 'None'
+    }
+  </script>
   {% block head %}
   {% endblock %}
 </head>

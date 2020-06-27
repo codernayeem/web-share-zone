@@ -141,7 +141,7 @@ def signup_page():
 
     user = User.query.filter_by(username=username).first()
     if user:
-        session['signup_error'] = 'The username was already used'
+        session['signup_error'] = 'The username is already used'
     elif not (username and password):
         session['signup_error'] = 'Please, provide all information'
     else:

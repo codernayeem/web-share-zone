@@ -91,9 +91,12 @@ def login_page():
         return redirect(request.args.get('next') or '/')
     if request.method == 'GET':
         error = session.get('error_login')
+        info = session.get('login_info')
         if error:
             session['error_login'] = None
-        return render_template('login.html', error=error)
+        if info:
+            session['login_info'] = None
+        return render_template('login.html', error=error, info=info)
     
     user = User.query.filter_by(username=request.form['username']).first()
     if user:

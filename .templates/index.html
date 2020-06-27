@@ -1,42 +1,53 @@
 {% extends "base.html" %}
 
-{% block activeNav %}nav-home{% endblock %}
-
 {% block content %}
 
+<section class="text-gray-700 body-font">
+  <div class="container px-5 py-2 mx-auto">
+    <div class="flex flex-wrap -m-4">
 
-<div>
-    <div class="row pr-2 pl-2">
-        <div class="col-md-4 p-2">
-            <div class="card">
-                <div class="card-header bg-success"><h4 class="text-center text-white" style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Share Zone</h4></div>
-                <div class="card-body text-center">
-                    <p>Here, You can <b>upload</b> and <b>download</b> shared files also with encryption</p>
-                    <a href="/sharezone" class="btn btn-success">Open</a>
-                </div>
-            </div>
+      <div class="p-4 sm:w-full md:w-1/2 lg:w-1/3">
+        <div class="h-full bg-gray-200 px-8 pt-12 pb-16 rounded-lg overflow-hidden text-center relative">
+          <h2 class="tracking-widest text-xs title-font font-medium text-gray-500 mb-1">ZONE 1</h2>
+          <h1 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">Share Zone</h1>
+          <p class="leading-relaxed mb-3">Here, you can share your files, download and upload files, send texts and more. You can also share files with encryption.</p>
+          <a href="/sharezone" class="bg-indigo-200 text-blue-500 hover:bg-blue-200 px-2 py-1 rounded focus:outline-none inline-flex items-center">Open
+            <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path>
+              <path d="M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
         </div>
-        <div class="col-md-4 p-2">
-            <div class="card">
-                <div class="card-header bg-primary"><h4 class="text-center text-white" style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Download Zone</h4></div>
-                <div class="card-body text-center">
-                    <p>Here, You can <b>only download</b> some selected files</p>
-                    <a href="/downloadzone" class="btn btn-primary">Open</a>
-                </div>
-            </div>
+      </div>
+      <div class="p-4 sm:w-full md:w-1/2 lg:w-1/3">
+        <div class="h-full bg-gray-200 px-8 pt-12 pb-16 rounded-lg overflow-hidden text-center relative">
+          <h2 class="tracking-widest text-xs title-font font-medium text-gray-500 mb-1">ZONE 2</h2>
+          <h1 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">Download Zone</h1>
+          <p class="leading-relaxed mb-3">Here, you can only download some selected files from the server. These files cannot be set by any client.</p>
+          <a href="/downloadzone" class="bg-indigo-200 text-blue-500 hover:bg-blue-200 px-2 py-1 rounded focus:outline-none inline-flex items-center">Open
+            <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path>
+              <path d="M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
         </div>
-        <div class="col-md-4 p-2">
-            <div class="card">
-                <div class="card-header bg-warning"><h4 class="text-center text-white" style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Upload Zone</h4></div>
-                <div class="card-body text-center">
-                    <p>Here, You can <b>only upload</b> files on server</p>
-                    <a href="/uploadzone" class="btn btn-warning">Open</a>
-                </div>
-            </div>
+      </div>
+      <div class="p-4 sm:w-full md:w-1/2 lg:w-1/3">
+        <div class="h-full bg-gray-200 px-8 pt-12 pb-16 rounded-lg overflow-hidden text-center relative">
+          <h2 class="tracking-widest text-xs title-font font-medium text-gray-500 mb-1">ZONE 3</h2>
+          <h1 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">Upload Zone</h1>
+          <p class="leading-relaxed mb-3">Here, you can only upload your files to the server. Remember, You can only access these uploaded file on the server.</p>
+          <a href="/uploadzone" class="bg-indigo-200 text-blue-500 hover:bg-blue-200 px-2 py-1 rounded focus:outline-none inline-flex items-center">Open
+            <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path>
+              <path d="M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
         </div>
+      </div>
+
     </div>
-
-</div>
-
+  </div>
+</section>
 
 {% endblock %}

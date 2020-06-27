@@ -2,52 +2,53 @@
 
 {% block Title %}Download Zone | WSZ{% endblock %}
 
-{% block nav_title %} Download Zone {% endblock %}
-
-{% block activeNavChlid %}nav-child-2{% endblock %}
+{% block head %}
+<style>
+tr:nth-child(even) { 
+  background-color: #f3f3f3; 
+}
+</style>
+{% endblock %}
 
 {% block content %}
 
-<div>
+<div class="container mx-auto p-5 flex flex-wrap">
   {% if total_count <= 0 %}
-  <div class="alert alert-warning fade show">
-    <h5>No file found to show</h5>
-    <h6>Please, try again later</h6>
+  <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 w-full p-4" role="alert">
+    <p class="font-bold">No file found to show</p>
+    <p>Please, try again later</p>
   </div>
   {% else %}
 
-  <div class="table-responsive">
-    <table class="table table-striped">
-      <tbody>
-        <tr class="font-weight-bold">
+  <div class="w-full">
+    <table class="table-auto w-full">
+      <thead>
+        <tr class="border">
           <td colspan='1'></span></td>
-          <td>Name</td>
-          <td>Actions</td>
-          <td>Size</td>
-          <td>Last modified</td>
+          <th class="px-4 py-2">Name</th>
+          <th class="px-4 py-2">Actions</th>
+          <th class="px-4 py-2">Size</th>
+          <th class="px-4 py-2">Last modified</th>
         </tr>
+      </thead>
+      <tbody>
 
         {% for a_file in fl_list %}
         <tr>
-          <td><img src="{{ url_for('static', filename=get_icon(a_file.name))}}" alt="icon"></a></td>
-          <td><a title="Open">{{ a_file.name }}</a></td>
-          <td><a href="{{ url_for('downloadzone_download', fl=a_file.name) }}" title="{{ a_file.name }}">Download</a></td>
-          <td>{{ sizeSince(a_file.size) }}</td>
-          <td>{{ a_file.date_modified }}</td>
+          <td class="border px-4 py-2"><img src="{{ url_for('static', filename=get_icon(a_file.name))}}" alt="icon"></a></td>
+          <td class="border px-4 py-2"><a title="Open">{{ a_file.name }}</a></td>
+          <td class="border px-4 py-2 text-indigo-500"><a href="{{ url_for('downloadzone_download', fl=a_file.name) }}" title="{{ a_file.name }}">Download</a></td>
+          <td class="border px-4 py-2">{{ sizeSince(a_file.size) }}</td>
+          <td class="border px-4 py-2">{{ a_file.date_modified }}</td>
         </tr>
         {% endfor %}
-
-        <tr>
-          <td colspan="5">&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan="1"></td>
-          <td colspan="5"><span>Total: {{ sizeSince(total_size) }} in {{ total_count }} file{% if not total_count <= 1 %}s{% endif %}</span></td>
-        </tr>
       </tbody>
     </table>
+    
+    <p class="mt-5 mx-auto">Total: {{ sizeSince(total_size) }} in {{ total_count }} file{% if not total_count <= 1 %}s{% endif %}</p>
+
   </div>
+
   {% endif %}
 </div>
-
 {% endblock %}

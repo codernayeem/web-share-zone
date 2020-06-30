@@ -185,8 +185,10 @@ def index_view():
 
 @app.route('/sharezone')
 def share_zone_view():
-
-    return render_template('share_zone.html', fl_list=[])
+    if not current_user.is_authenticated:
+        return redirect(url_for('login_page', next='/sharezone'))
+        
+    return render_template('share_zone.html')
 
 
 @app.route('/downloadzone')

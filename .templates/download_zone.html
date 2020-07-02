@@ -34,12 +34,12 @@ tr:nth-child(even) {
       <tbody>
 
         {% for a_file in fl_list %}
-        <tr>
-          <td class="border px-4 py-2"><img src="{{ url_for('static', filename=get_icon(a_file.name))}}" alt="icon"></a></td>
-          <td class="border px-4 py-2"><a title="Open">{{ a_file.name }}</a></td>
-          <td class="border px-4 py-2 text-indigo-500"><a href="{{ url_for('downloadzone_download', fl=a_file.name) }}" title="{{ a_file.name }}"><img src="{{ url_for('static', filename='ic_download.png') }}" alt="Download" style="height: 20px; width: 20px;"></a></td>
-          <td class="border px-4 py-2">{{ sizeSince(a_file.size) }}</td>
-          <td class="border px-4 py-2">{{ a_file.date_modified }}</td>
+        <tr class="border">
+          <td class="px-2 py-2"><img src="{{ url_for('static', filename=get_icon(a_file.name))}}" alt="icon"></a></td>
+          <td class="px-2 py-2"><a title="Open">{{ a_file.name }}</a></td>
+          <td class="px-2 py-2"><a href="{{ url_for('downloadzone_download', fl=a_file.name) }}" title="{{ a_file.name }}"><img src="{{ url_for('static', filename='ic_download.png') }}" alt="Download" style="height: 20px; width: 20px;"></a></td>
+          <td class="px-2 py-2">{{ sizeSince(a_file.size) }}</td>
+          <td class="px-4 py-2">{{ a_file.date_modified }}</td>
         </tr>
         {% endfor %}
       </tbody>

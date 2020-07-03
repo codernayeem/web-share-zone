@@ -21,29 +21,48 @@ tr:nth-child(even) {
   {% else %}
 
   <div class="w-full">
-    <table class="table-auto w-full">
-      <thead>
-        <tr class="border">
-          <td colspan='1'></span></td>
-          <th class="px-4 py-2">Name</th>
-          <th colspan='1'></th>
-          <th class="px-4 py-2">Size</th>
-          <th class="px-4 py-2">Last modified</th>
-        </tr>
-      </thead>
-      <tbody>
+    <div class="w-full border-2">
+      {% for a_file in fl_list %}
 
-        {% for a_file in fl_list %}
-        <tr class="border">
-          <td class="px-2 py-2"><img src="{{ url_for('static', filename=get_icon(a_file.name))}}" alt="icon"></a></td>
-          <td class="px-2 py-2"><a title="Open">{{ a_file.name }}</a></td>
-          <td class="px-2 py-2"><a href="{{ url_for('downloadzone_download', fl=a_file.name) }}" title="{{ a_file.name }}"><img src="{{ url_for('static', filename='ic_download.png') }}" alt="Download" style="height: 20px; width: 20px;"></a></td>
-          <td class="px-2 py-2">{{ sizeSince(a_file.size) }}</td>
-          <td class="px-4 py-2">{{ a_file.date_modified }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      <div class="flex flex-col lg:flex-row border p-3">
+
+        <div class="w-full lg:w-1/2 mb-2 lg:mb-0">
+          <div class="flex">
+            <div class="flex-shrink-0 pr-2">
+              <img src="{{ url_for('static', filename=get_icon(a_file.name))}}" alt="icon">
+            </div>
+            <div class="flex-shrink px-2">
+              <p style="font-weight: 500;"><a title="Open">{{ a_file.name }}</a></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full lg:w-1/2">
+          <div class="flex">
+            
+            <div class="flex-grow px-1">
+              <div class="flex">
+                <div class="flex-1 px-1 ml-8 lg:ml-0">
+                  <p class="text-sm">{{ sizeSince(a_file.size) }}</p>
+                </div>
+
+                <div class="flex-1 px-1">
+                  <p class="text-sm">{{ a_file.date_modified }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-grow-0 pl-1">
+              <a href="{{ url_for('downloadzone_download', fl=a_file.name) }}" title="{{ a_file.name }}"><img src="{{ url_for('static', filename='ic_download.png') }}" alt="Download" style="height: 20px; width: 20px;"></a>
+            </div>
+            
+          </div>
+        </div>
+      
+      </div>
+
+      {% endfor %}
+    </div>
     
     <p class="mt-5 mx-auto">Total: {{ sizeSince(total_size) }} in {{ total_count }} file{% if not total_count <= 1 %}s{% endif %}</p>
 

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block Title %}File Viewer | WSZ{% endblock %}
+
+{% block content %}
+
+<div class="container mx-auto p-5 flex flex-wrap">
+  {% if fl.error %}
+  <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 w-full p-4">
+    <p class="font-bold text-lg">{{ fl.error }}</p>
+    <p>File Name : <span class="font-semibold">{{ fl.name }}</span></p>
+    <p>Please, try again later</p>
+  </div>
+  {% else %}
+
+  <div class="w-full">
+    <div class="w-full py-1 px-2 border rounded-t bg-gray-200 text-lg">
+      <p class="overflow-x-auto">File : <span class="font-semibold font-mono">{{ fl.name }}</span></p>
+    </div>
+    <div class="w-full py-1 px-2 border-l border-r bg-gray-100">
+
+      {% if fl.file_type == "video" %}
+      <div class="w-full">
+        <video class="m-auto" src="{{ url_for('downloadzone_download', fl=fl.name) }}" controls autoplay></video>
+      </div>
+      {% elif fl.file_type == "picture" %}
+      <div class="w-full p-3">
+        <img class="m-auto" src="{{ url_for('downloadzone_download', fl=fl.name) }}"></img>
+      </div>
+      {% elif fl.file_type == "audio" %}
+      <div class="w-full p-3">
+        <audio class="w-full" src="{{ url_for('downloadzone_download', fl=fl.name) }}" controls autoplay></audio>
+      </div>
+      {% elif fl.file_type == "text" %}
+    
+      <pre class="overflow-x-auto">{{ fl.content }}</pre>
+    
+      {% else %}
+      <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 m-4">
+        <p class="font-bold text-lg">Unable to open this file</p>
+        <p>Unsupported File</p>
+      </div>
+      {% endif %}
+
+    </div>
+    <div class="w-full py-1 px-2 border rounded-b bg-gray-200 flex">
+      <pre class="flex-grow">{{ sizeSince(fl.size) }}  •  {{fl.date_modified}}</pre>
+      <a class="flex-grow-0" href="{{ url_for('downloadzone_download', fl=fl.name) }}" title="{{ fl.name }}"><img src="{{ url_for('static', filename='ic_download.png') }}" alt="Download" style="height: 20px; width: 20px;"></a>
+    </div>
+  </div>
+
+  {% endif %}
+</div>
+{% endblock %}

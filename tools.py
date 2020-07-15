@@ -6,6 +6,20 @@ from random import randint
 import time, base64, config as cfg
 
 
+def get_polished_datetime(date_time_object):
+    res = ''
+    date_ = datetime.now()
+    if date_.date() == date_time_object.date():
+        return date_time_object.strftime('%I:%M %p')
+    else:
+        res += date_time_object.strftime('%I:%M %p  |  %d %b')
+
+    if date_.year != date_time_object.year:
+        res += date_time_object.strftime(' %Y')
+
+    return res
+
+
 def get_icon(extension, file_type=None):
     icon = cfg.file_type_icon.get(file_type)
     if not icon:

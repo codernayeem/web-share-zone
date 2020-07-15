@@ -15,6 +15,19 @@ def get_icon(extension, file_type=None):
     return cfg.file_type_icon['default']
 
 
+def create_share_zone_file(sharezone_id, filedata):
+    pth = Path(cfg.SHAREZONE_ZONE_PATH)
+    if not pth.exists():
+        create_folder(pth)
+    try:
+        fl = open(str(sharezone_id), 'wb')
+        fl.write(filedata)
+        fl.close()
+        return True
+    except:
+        return False
+
+
 def create_folder(pth):
     if pth:
         pth = str(pth)

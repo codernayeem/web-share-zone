@@ -10,7 +10,7 @@ from colorama import init, Fore, Back
 from datetime import datetime
 import socket, sys, config as cfg, json
 
-from tools import Path, join, create_folder, create_share_zone_file, get_formatted_datetime, get_downloadzone_files, get_downloadzone_single_file, encode64, decode64, sizeSince, is_valid_file, get_icon
+from tools import Path, join, create_folder, get_polished_datetime, create_share_zone_file, get_formatted_datetime, get_downloadzone_files, get_downloadzone_single_file, encode64, decode64, sizeSince, is_valid_file, get_icon
 
 init()
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
@@ -24,7 +24,7 @@ login_manager.init_app(app)
 
 @app.context_processor
 def inject_common_data():
-    return dict(encode64=encode64, decode64=decode64, sizeSince=sizeSince, get_icon=get_icon, get_user=get_user, get_name=get_name)
+    return dict(encode64=encode64, decode64=decode64, sizeSince=sizeSince, get_icon=get_icon, get_polished_datetime=get_polished_datetime)
 
 
 class User(UserMixin, db.Model):
@@ -85,17 +85,6 @@ def load_user(user_id):
 def save_db(data):
     db.session.add(data)
     db.session.commit()
-
-
-def get_user(user_id):
-    return User.query.get(user_id)
-
-
-def get_name(user):
-    if user:
-        return user.get_name()
-    else:
-        return 'Someone'
 
 
 def get_new_share_zone_id():
@@ -207,9 +196,15 @@ def share_zone_view():
     if not current_user.is_authenticated:
         return redirect(url_for('login_page', next='/sharezone'))
 
-    shareZone = ShareZone.query.all()
+    shareZone = []
+    for i in ShareZone.query.all():
+        if not i.hidden:
+            i.user_obj = User.query.get(i.user)
+            shareZone.append(i)
+
+    shareZone = sorted(shareZone, key=lambda i: i.publish_date)
     
-    return render_template('share_zone.html', shareZone=shareZone, total_count=len(shareZone))
+    return render_template('share_zone.html', shareZone=reversed(shareZone), total_count=len(shareZone))
 
 
 @app.route('/sharezone/upload', methods=['POST'])

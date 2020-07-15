@@ -4,31 +4,48 @@
 
 {% block content %}
 
-<div class="container mx-auto p-3">
-    <div class="p-2 sticky-top border border-b-2 rounded flex shadow items-center mb-4">
-        <h4 class="font-semibold text-xl">Share Zone</h4>
-        <div class="ml-auto">
-            <a class="bg-indigo-600 text-white hover:bg-indigo-800 px-2 py-1 rounded focus:outline-none cursor-pointer" onclick="location.reload(true)">Refresh</a>
-            <a href="/" class="bg-indigo-600 text-white hover:bg-indigo-800 px-2 py-1 rounded focus:outline-none">Home</a>
-            <a href="/logout" class="bg-red-600 text-white hover:bg-red-700 px-2 py-1 rounded focus:outline-none">Logout</a>
-        </div>
+<div class="w-full fixed top-0 bg-gray-100 border-b-2 shadow-lg p-2 flex items-center text-gray-900">
+    <p class="font-semibold text-xl m-0">Share Zone</p>
+    <div class="ml-auto">
+        <a class="bg-indigo-500 text-white hover:bg-indigo-700 px-2 py-1 rounded focus:outline-none cursor-pointer" onclick="location.reload(true)">Refresh</a>
+        <a href="/" class="bg-indigo-500 text-white hover:bg-indigo-700 px-2 py-1 rounded focus:outline-none">Home</a>
+        <a href="/logout" class="bg-red-500 text-white hover:bg-red-600 px-2 py-1 rounded focus:outline-none">Logout</a>
     </div>
+</div>
 
-    <div class="p-2">
-        <div class="border-l-4 border-orange-600 bg-orange-100 p-3">
-            <p class="text-red-800 font-bold text-lg">Nothing found to show</p>
-            <p class="text-red-700">Please, try again later</p>
-        </div>
-    </div>
-    
-    <div class="p-2 border border-t-2 rounded flex items-center mt-4">
-        <p class="text-lg">Text : </p>
-        <input type="text" class="border px-2 mx-3" >
-        <div class="ml-auto">
-            <a class="bg-indigo-500 text-white hover:bg-indigo-600 px-2 py-1 rounded mx-1 focus:outline-none cursor-pointer"> Send </a>
+<div class="w-full fixed bottom-0 bg-gray-200 border-t-2 p-3 flex items-center text-gray-900">
+    <p class="flex-shrink text-lg">Text : </p>
+    <form class="flex-grow flex items-center" action="/sharezone/upload" method="POST">
+        <input name="data" type="text" class="border px-2 mx-3 flex-grow bg-gray-100 py-1" required>
+        <input name="data_type" value="message" hidden>
+        <div class="flex-grow-0">
+            <button type="submit" class="bg-indigo-500 text-white hover:bg-indigo-600 px-2 py-1 rounded mx-1 focus:outline-none cursor-pointer"> Send </button>
             <a class="bg-indigo-500 text-white hover:bg-indigo-600 px-2 py-1 rounded mx-1 focus:outline-none cursor-pointer" data-toggle="modal" data-target="#uploadmodal"> Upload </a>
         </div>
+    </form>
+</div>
+
+<div class="container mx-auto p-2 my-16">
+    <div class="p-2 pt-0">
+
+        {% if total_count == 0 %}
+        <div class="border-l-4 border-orange-600 bg-orange-100 text-red-700 p-3 mb-2">
+            <p class="font-bold text-lg">Nothing found to show</p>
+            <p>Please, try again later</p>
+        </div>
+        {% else %}
+
+        {% for i in shareZone %}
+        <div>
+            <!-- Coming Soon -->
+
+            {{ get_name(get_user(i.user)) }} said : {{ i.data_content }}
+        </div>
+        {% endfor %}
+
+        {% endif %}
     </div>
+
 </div>
 
 {% endblock %}

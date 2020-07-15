@@ -2,19 +2,11 @@
 
 {% block Title %}Download Zone | WSZ{% endblock %}
 
-{% block head %}
-<style>
-tr:nth-child(even) { 
-  background-color: #f3f3f3; 
-}
-</style>
-{% endblock %}
-
 {% block content %}
 
 <div class="container mx-auto p-5 flex flex-wrap">
   {% if total_count <= 0 %}
-  <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 w-full p-4" role="alert">
+  <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 w-full p-4">
     <p class="font-bold">No file found to show</p>
     <p>Please, try again later</p>
   </div>
@@ -29,10 +21,10 @@ tr:nth-child(even) {
         <div class="w-full lg:w-1/2 mb-2 lg:mb-0">
           <div class="flex">
             <div class="flex-shrink-0 pr-2">
-              <img src="{{ url_for('static', filename=get_icon(a_file.name))}}" alt="icon">
+              <img src="{{ url_for('static', filename=get_icon(a_file.extension, a_file.file_type))}}" alt="icon">
             </div>
-            <div class="flex-shrink px-2">
-              <p style="font-weight: 500;"><a title="Open">{{ a_file.name }}</a></p>
+            <div class="flex-shrink px-2 overflow-x-auto">
+              <p class="font-semibold">{{ a_file.name }}</p>
             </div>
           </div>
         </div>
@@ -42,19 +34,26 @@ tr:nth-child(even) {
             
             <div class="flex-grow px-1">
               <div class="flex">
-                <div class="flex-1 px-1 ml-8 lg:ml-0">
+                <div class="w-2/5 px-1 ml-8 lg:ml-0">
                   <p class="text-sm">{{ sizeSince(a_file.size) }}</p>
                 </div>
 
-                <div class="flex-1 px-1">
+                <div class="w-3/5 px-1">
                   <p class="text-sm">{{ a_file.date_modified }}</p>
                 </div>
               </div>
             </div>
 
-            <div class="flex-grow-0 pl-1">
-              <a href="{{ url_for('downloadzone_download', fl=a_file.name) }}" title="{{ a_file.name }}"><img src="{{ url_for('static', filename='ic_download.png') }}" alt="Download" style="height: 20px; width: 20px;"></a>
-            </div>
+            <div class="flex-grow-0">
+              <div class="flex">
+                <div class="flex-1 pl-1">
+                  <a href="{{ url_for('downloadzone_file_view', fl=a_file.name) }}" title="Open"><img src="{{ url_for('static', filename='ic_open.svg') }}" alt="Open" style="height: 22px; width: 22px;"></a>
+                </div>
+                <div class="flex-1 pl-2">
+                  <a href="{{ url_for('downloadzone_download', fl=a_file.name) }}" title="{{ a_file.name }}"><img src="{{ url_for('static', filename='ic_download.png') }}" alt="Download" style="height: 20px; width: 20px;"></a>
+                </div>
+              </div>
+          </div>
             
           </div>
         </div>

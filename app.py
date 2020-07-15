@@ -61,10 +61,11 @@ class ShareZone(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
     sharezone_id = db.Column(db.Integer, unique=True, nullable=False)
     user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-    password = db.Column(db.String(200), nullable=False)
+    password = db.Column(db.String(200), nullable=True)
     hidden = db.Column(db.Boolean, nullable=False)
     data_type = db.Column(db.String(200), nullable=False)
-    shared_data = db.Column(db.String(1000), nullable=False)
+    data = db.Column(db.String(1000), nullable=True)
+    data_content = db.Column(db.String(1000), nullable=True)
     publish_date = db.Column(db.DateTime, index=False, nullable=True)
     last_modify_date = db.Column(db.DateTime, index=False, nullable=True)
 
@@ -189,6 +190,25 @@ def share_zone_view():
         return redirect(url_for('login_page', next='/sharezone'))
         
     return render_template('share_zone.html')
+
+
+@app.route('/sharezone/upload', methods=['POST'])
+def share_zone_upload_view():
+    if not current_user.is_authenticated:
+        return Response(status=403)
+    
+    data = request.form.get('data')
+    data_type = request.form.get('data_type')
+    data_name = request.form.get('data_name')
+
+    if data_type == 'message' and data:
+        print('message : ', data)
+    elif data_type == 'file' and data_name and data != None:
+        pass
+    else:
+        return Response(status=404)
+
+    return redirect(url_for('share_zone_view'))
 
 
 @app.route('/downloadzone')

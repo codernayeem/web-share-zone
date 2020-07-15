@@ -8,9 +8,9 @@ from flask_admin.contrib.sqla import ModelView
 
 from colorama import init, Fore, Back
 from datetime import datetime
-import socket, sys, config as cfg
+import socket, sys, config as cfg, json
 
-from tools import Path, join, create_folder, get_formatted_datetime, get_downloadzone_files, get_downloadzone_single_file, encode64, decode64, sizeSince, is_valid_file, get_icon
+from tools import Path, join, create_folder, create_share_zone_file, get_formatted_datetime, get_downloadzone_files, get_downloadzone_single_file, encode64, decode64, sizeSince, is_valid_file, get_icon
 
 init()
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
@@ -24,7 +24,7 @@ login_manager.init_app(app)
 
 @app.context_processor
 def inject_common_data():
-    return dict(encode64=encode64, decode64=decode64, sizeSince=sizeSince, get_icon=get_icon)
+    return dict(encode64=encode64, decode64=decode64, sizeSince=sizeSince, get_icon=get_icon, get_user=get_user, get_name=get_name)
 
 
 class User(UserMixin, db.Model):
@@ -64,7 +64,6 @@ class ShareZone(db.Model):
     password = db.Column(db.String(200), nullable=True)
     hidden = db.Column(db.Boolean, nullable=False)
     data_type = db.Column(db.String(200), nullable=False)
-    data = db.Column(db.String(1000), nullable=True)
     data_content = db.Column(db.String(1000), nullable=True)
     publish_date = db.Column(db.DateTime, index=False, nullable=True)
     last_modify_date = db.Column(db.DateTime, index=False, nullable=True)
@@ -86,6 +85,25 @@ def load_user(user_id):
 def save_db(data):
     db.session.add(data)
     db.session.commit()
+
+
+def get_user(user_id):
+    return User.query.get(user_id)
+
+
+def get_name(user):
+    if user:
+        return user.get_name()
+    else:
+        return 'Someone'
+
+
+def get_new_share_zone_id():
+    all_id = [i.sharezone_id for i in ShareZone.query.all()]
+    i = 10001
+    while i in all_id:
+        i += 1
+    return i
 
 
 admin_bp = Blueprint('admin_bp', __name__)
@@ -188,8 +206,10 @@ def index_view():
 def share_zone_view():
     if not current_user.is_authenticated:
         return redirect(url_for('login_page', next='/sharezone'))
-        
-    return render_template('share_zone.html')
+
+    shareZone = ShareZone.query.all()
+    
+    return render_template('share_zone.html', shareZone=shareZone, total_count=len(shareZone))
 
 
 @app.route('/sharezone/upload', methods=['POST'])
@@ -202,9 +222,30 @@ def share_zone_upload_view():
     data_name = request.form.get('data_name')
 
     if data_type == 'message' and data:
-        print('message : ', data)
+        shared_message = ShareZone()
+        shared_message.data_type = data_type
+        shared_message.data_content = data
+        shared_message.user = current_user.id
+        shared_message.sharezone_id = get_new_share_zone_id()
+        shared_message.hidden = False
+        shared_message.publish_date = datetime.now()
+        shared_message.last_modify_date = shared_message.publish_date
+        save_db(shared_message)
+
     elif data_type == 'file' and data_name and data != None:
-        pass
+        shared_message = ShareZone()
+        shared_message.sharezone_id = get_new_share_zone_id()
+
+        if not create_share_zone_file(shared_message.sharezone_id, data):
+            return Response(status=500)
+
+        shared_message.data_type = data_type
+        shared_message.data_content = data_name
+        shared_message.user = current_user.id
+        shared_message.hidden = False
+        shared_message.publish_date = datetime.now()
+        shared_message.last_modify_date = shared_message.publish_date
+    
     else:
         return Response(status=404)
 

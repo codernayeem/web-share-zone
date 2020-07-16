@@ -69,23 +69,26 @@
         {% for i in shareZone %}
 
         {% if i.data_type == 'message'%}
-        <div class="mb-3">
+        <div class="mb-3 {% if i.user == current_user.id %} ml-auto {% endif %}" style="width: 80%;">
             <p class="mb-1">{% if i.user_obj %} {{i.user_obj.get_name()}} {% else %} Someone {% endif %}</p>
             <div class="pr-5 ml-2">
-                <p class="text-gray-700 rounded m-0 text-sm px-2 py-1" {% if i.user == current_user.id %} style="background-color: #0086b3; color: #fffdf2;" {% else %} style="background-color: #ebebeb;" {%endif%}>{{ i.data_content }}</p>
+                <p class="text-gray-700 rounded m-0 px-2 py-1" {% if i.user == current_user.id %} style="background-color: #0086b3; color: #fffdf2;" {% else %} style="background-color: #ebebeb;" {%endif%}>{{ i.data_content }}</p>
                 <pre class="mt-1 text-gray-500 text-xs">{{ get_polished_datetime(i.publish_date) }}</pre>
             </div>
         </div>
         {% else %}
-        <div>
-            <div class="incoming_msg">
-                <div class="incoming_msg_img"> {{ get_name(get_user(i.user)) }} </div>
-                <div class="received_msg">
-                  <div class="received_withd_msg">
-                    <p>{{ i.data_content }}</p>
-                    <span class="time_date"> 11:01 AM    |    June 9</span></div>
+        <div class="mb-3 {% if i.user == current_user.id %} ml-auto {% endif %}" style="width: 80%;">
+            <p class="mb-1">{% if i.user_obj %} {{i.user_obj.get_name()}} {% else %} Someone {% endif %}</p>
+            <div class="pr-5 ml-2">
+                <div class="w-full items-center px-2 py-1 border-2 border-indigo-100 rounded bg-gray-200 flex" style="{% if i.user == current_user.id %} background-color: #89aebd; color: #fffdf2; {% else %} background-color: #ebebeb; {%endif%}">
+                    <img class="flex-shrink mr-2" src="{{ url_for('static', filename=get_icon(i.extension, i.file_type))}}" alt="icon" style="height: 22px; width: 22px;">
+                    <pre class="flex-grow overflow-x-auto">{{ i.data_content }}</pre>
+                    <a class="flex-grow-0 ml-2" href="{{ url_for('downloadzone_download', id=i.sharezone_id) }}" title="{{ i.data_content }}">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="22px" height="22px" viewBox="0 0 433.5 433.5" style="fill: {% if i.user == current_user.id %} #f5f1f1 {% else %} #2d3135 {%endif%};" xml:space="preserve"><g><g><path d="M395.25,153h-102V0h-153v153h-102l178.5,178.5L395.25,153z M38.25,382.5v51h357v-51H38.25z"/></g></g></svg>
+                    </a>
                 </div>
-              </div>
+                <pre class="mt-1 text-gray-500 text-xs">{{ get_polished_datetime(i.publish_date) }}</pre>
+            </div>
         </div>
         {% endif %}
 

@@ -96,6 +96,13 @@ def get_formatted_datetime(format):
     return datetime.now().strftime(format)
 
 
+def get_share_zone_data(i):
+    if i.data_type == 'file':
+        i.extension = get_filename_extension(i.data_content)[1]
+        i.file_type = get_filetype(i.extension)
+    return i
+
+
 def get_downloadzone_files(pth, sort='n', order='a'):
     pth = Path(pth)
     if not pth.exists():

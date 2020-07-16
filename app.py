@@ -10,7 +10,7 @@ from colorama import init, Fore, Back
 from datetime import datetime
 import socket, sys, config as cfg, json
 
-from tools import Path, join, create_folder, get_polished_datetime, create_share_zone_file, get_formatted_datetime, get_downloadzone_files, get_downloadzone_single_file, encode64, decode64, sizeSince, is_valid_file, get_icon
+from tools import Path, join, get_share_zone_data, create_folder, get_polished_datetime, create_share_zone_file, get_formatted_datetime, get_downloadzone_files, get_downloadzone_single_file, encode64, decode64, sizeSince, is_valid_file, get_icon
 
 init()
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
@@ -200,6 +200,7 @@ def share_zone_view():
     for i in ShareZone.query.all():
         if not i.hidden:
             i.user_obj = User.query.get(i.user)
+            i = get_share_zone_data(i)
             shareZone.append(i)
 
     shareZone = sorted(shareZone, key=lambda i: i.publish_date)

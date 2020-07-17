@@ -214,8 +214,8 @@ def share_zone_upload_view():
         return Response(status=403)
     
     data = request.form.get('data')
+    data_file = request.files.get('file')
     data_type = request.form.get('data_type')
-    data_name = request.form.get('data_name')
 
     if data_type == 'message' and data:
         shared_message = ShareZone()
@@ -228,24 +228,46 @@ def share_zone_upload_view():
         shared_message.last_modify_date = shared_message.publish_date
         save_db(shared_message)
 
-    elif data_type == 'file' and data_name and data != None:
-        shared_message = ShareZone()
-        shared_message.sharezone_id = get_new_share_zone_id()
+    elif data_type == 'file' and data_file and data_file.filename:
+        shared_data = ShareZone()
+        shared_data.sharezone_id = get_new_share_zone_id()
 
-        if not create_share_zone_file(shared_message.sharezone_id, data):
+        if not create_share_zone_file(shared_data.sharezone_id, data_file):
             return Response(status=500)
 
-        shared_message.data_type = data_type
-        shared_message.data_content = data_name
-        shared_message.user = current_user.id
-        shared_message.hidden = False
-        shared_message.publish_date = datetime.now()
-        shared_message.last_modify_date = shared_message.publish_date
-    
+        shared_data.data_type = data_type
+        shared_data.data_content = secure_filename(data_file.filename)
+        shared_data.user = current_user.id
+        shared_data.hidden = False
+        shared_data.publish_date = datetime.now()
+        shared_data.last_modify_date = shared_data.publish_date
+        save_db(shared_data)
+
     else:
         return Response(status=404)
 
     return redirect(url_for('share_zone_view'))
+
+
+@app.route('/sharezone/download')
+def share_zone_download_view():
+    if not current_user.is_authenticated:
+        return Response(status=403)
+    
+    try:
+        sharezone_id = int(request.args.get('id'))
+    except:
+        sharezone_id = None
+    
+    if sharezone_id:
+        shareZone = ShareZone.query.filter_by(sharezone_id=sharezone_id).first()
+        if shareZone and shareZone.data_type == 'file':
+            try:
+                return send_from_directory(cfg.SHAREZONE_ZONE_PATH, str(sharezone_id), as_attachment=True, attachment_filename=shareZone.data_content)
+            except:
+                pass
+
+    return Response(status=404)
 
 
 @app.route('/downloadzone')

@@ -3,8 +3,21 @@
 {% block Title %}Share Zone | WSZ{% endblock %}
 
 {% block head %}
-<style>
-</style>
+<script>
+
+    function open_upload_modal(){
+        var upload_modal = document.getElementById('upload_modal');
+        upload_modal.classList.remove('hidden');
+        upload_modal.classList.add('block');
+    }
+
+    function close_upload_modal(){
+        var upload_modal = document.getElementById('upload_modal');
+        upload_modal.classList.remove('block');
+        upload_modal.classList.add('hidden');
+    }
+
+</script>
 {% endblock %}
 
 {% block content %}
@@ -49,7 +62,7 @@
             <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 px-2 py-1 rounded mx-1 focus:outline-none cursor-pointer"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" x="0px" y="0px" viewBox="0 0 535.5 535.5" style="fill: white;">
                 <g><g><polygon points="0,497.25 535.5,267.75 0,38.25 0,216.75 382.5,267.75 0,318.75"/></g></g></svg>
             </button>
-            <a class="bg-indigo-500 text-white hover:bg-indigo-600 px-2 py-1 rounded mx-1 focus:outline-none cursor-pointer" data-toggle="modal" data-target="#uploadmodal"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" x="0px" y="0px" viewBox="0 0 1000 1000" style="fill: white;">
+            <a onclick="open_upload_modal();" class="bg-indigo-500 text-white hover:bg-indigo-600 px-2 py-1 rounded mx-1 focus:outline-none cursor-pointer" data-toggle="modal" data-target="#uploadmodal"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" x="0px" y="0px" viewBox="0 0 1000 1000" style="fill: white;">
                 <g><path d="M850,974.5H150c-77.3,0-140-65.3-140-145.9V646.3c0-20.1,15.7-36.5,35-36.5h70c19.3,0,35,16.3,35,36.5v109.4c0,40.3,31.3,72.9,70,72.9h560c38.7,0,70-32.7,70-72.9V646.3c0-20.1,15.7-36.5,35-36.5h70c19.3,0,35,16.3,35,36.5v182.3C990,909.2,927.3,974.5,850,974.5L850,974.5z M784.5,449.2c-14.2,14.8-37.1,14.8-51.3,0L570,279.1v367.2c0,20.1-15.7,36.5-35,36.5h-70c-19.3,0-35-16.3-35-36.5V279.1L266.8,449.2c-14.2,14.8-37.1,14.8-51.3,0l-51.3-53.4c-14.2-14.8-14.2-38.7,0-53.4L453.2,41.1c1.2-1.3,23.7-15.6,46.4-15.6c22.9,0,45.9,14.3,47.2,15.6l289.1,301.2c14.2,14.8,14.2,38.7,0,53.4L784.5,449.2L784.5,449.2z"/></g></svg>
             </a>
         </div>
@@ -98,5 +111,18 @@
     </div>
 
 </div>
+
+<div id="upload_modal" class="py-2 px-1 overflow-y-auto text-gray-900 flex hidden fixed top-0 w-full h-full" style="background-color: rgba(0, 0, 0, 0.45);">
+    <form class="w-5/6 md:w-2/3 lg:w-1/2 rounded-lg bg-white m-auto p-2 md:px-4 text-center" action="/sharezone/upload" method="POST" enctype="multipart/form-data">
+        <p class="text-2xl mb-4 font-semibold">Upload</p>
+        <input name="data_type" value="file" hidden>
+        <input type="file" name="file" class="bg-indigo-100 border-4 border-gray-400 border-dashed rounded w-full px-8 py-8" required>
+        <div class="py-4 pt-4 pb-2">
+            <button onclick="close_upload_modal()" class="ml-2 bg-red-500 hover:bg-red-600 focus:outline-none px-3 py-1 rounded text-white">Cancel</button>
+            <input type="submit" value="Upload" class="bg-indigo-500 hover:bg-indigo-600 focus:outline-none px-3 py-1 rounded text-white">
+        </div>
+    </form>
+</div>
+
 
 {% endblock %}

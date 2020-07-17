@@ -96,7 +96,7 @@
                 <div class="w-full items-center px-2 py-1 border-2 border-indigo-100 rounded bg-gray-200 flex" style="{% if i.user == current_user.id %} background-color: #89aebd; color: #fffdf2; {% else %} background-color: #ebebeb; {%endif%}">
                     <img class="flex-shrink mr-2" src="{{ url_for('static', filename=get_icon(i.extension, i.file_type))}}" alt="icon" style="height: 22px; width: 22px;">
                     <pre class="flex-grow overflow-x-auto">{{ i.data_content }}</pre>
-                    <a class="flex-grow-0 ml-2" href="{{ url_for('downloadzone_download', id=i.sharezone_id) }}" title="{{ i.data_content }}">
+                    <a class="flex-grow-0 ml-2" href="{{ url_for('share_zone_download_view', id=i.sharezone_id) }}" title="{{ i.data_content }}">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="22px" height="22px" viewBox="0 0 433.5 433.5" style="fill: {% if i.user == current_user.id %} #f5f1f1 {% else %} #2d3135 {%endif%};" xml:space="preserve"><g><g><path d="M395.25,153h-102V0h-153v153h-102l178.5,178.5L395.25,153z M38.25,382.5v51h357v-51H38.25z"/></g></g></svg>
                     </a>
                 </div>

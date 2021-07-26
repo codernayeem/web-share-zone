@@ -1,3 +1,8 @@
+# To satrt server, run:
+# --> python app.py
+# --> python app.py * <port>
+# --> python app.py <network-ip> <port>
+
 from flask import Flask, Blueprint, render_template, redirect, request, session, Response, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
@@ -10,23 +15,36 @@ from colorama import init, Fore, Back
 from datetime import datetime
 import socket, sys, config as cfg, json
 
-from tools import Path, join, get_share_zone_data, create_folder, get_polished_datetime, create_share_zone_file, get_formatted_datetime, get_downloadzone_files, get_downloadzone_single_file, encode64, decode64, sizeSince, is_valid_file, get_icon
+from tools import Path, join, isdir, isfile, get_share_zone_data, create_folder, get_polished_datetime, create_share_zone_file, get_formatted_datetime, get_downloadzone_files, get_downloadzone_single_file, encode64, decode64, sizeSince, get_icon
 
+# colorama init
 init()
+
+# creating folders
+create_folder(cfg.SHAREZONE_ZONE_PATH)
+create_folder(cfg.DOWNLOAD_ZONE_PATH)
+create_folder(cfg.UPLOAD_ZONE_PATH)
+
+# flask app
 app = Flask(__name__, instance_relative_config=False, static_folder='.static', template_folder='.templates')
 
+# SQL Database
 db = SQLAlchemy()
 app.config.from_object('config.Config')
 db.init_app(app)
+
+# Login Manager
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+# needy func/data for rendering page
 @app.context_processor
 def inject_common_data():
     return dict(encode64=encode64, decode64=decode64, sizeSince=sizeSince, get_icon=get_icon, get_polished_datetime=get_polished_datetime)
 
 
+# User class for Database
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
 
@@ -41,9 +59,7 @@ class User(UserMixin, db.Model):
     ShareZone = db.relationship('ShareZone', backref='User', lazy=True)
 
     def get_name(self):
-        if self.fullname:
-            return self.fullname
-        return self.username
+        return self.fullname if self.fullname else self.username
 
     def set_password(self, password):
         self.password = generate_password_hash(password, method='sha256')
@@ -54,7 +70,7 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
-
+# ShareZone class for Database
 class ShareZone(db.Model):
     __tablename__ = 'sharezone'
 
@@ -272,27 +288,27 @@ def share_zone_download_view():
 
 @app.route('/downloadzone')
 def downloadzone_view():
-    if not current_user.is_authenticated:
+    if cfg.NEED_AUTH_FOR_DOWNLOAD_ZONE and not current_user.is_authenticated:
         return redirect(url_for('login_page', next='/downloadzone'))
     
-    files, total_size, sort, order = get_downloadzone_files(cfg.DOWNLOAD_ZONE_PATH)
+    files, total_size, _, _ = get_downloadzone_files(cfg.DOWNLOAD_ZONE_PATH)
     return render_template('download_zone.html', fl_list=files, total_count=len(files), total_size=total_size)
 
 
 @app.route('/downloadzone/view')
 def downloadzone_file_view():
-    if not current_user.is_authenticated:
+    if cfg.NEED_AUTH_FOR_DOWNLOAD_ZONE and not current_user.is_authenticated:
         return redirect(url_for('login_page', next='/downloadzone'))
     return render_template('download_zone_view.html', fl=get_downloadzone_single_file(cfg.DOWNLOAD_ZONE_PATH, request.args.get('fl')))
 
 
 @app.route('/downloadzone/download')
 def downloadzone_download():
-    if not current_user.is_authenticated:
+    if cfg.NEED_AUTH_FOR_DOWNLOAD_ZONE and not current_user.is_authenticated:
         return Response(status=403)
+    
     fl = request.args.get('fl')
-
-    if fl and is_valid_file(join(cfg.DOWNLOAD_ZONE_PATH, fl)):
+    if fl and isfile(join(cfg.DOWNLOAD_ZONE_PATH, fl)):
         return send_from_directory(cfg.DOWNLOAD_ZONE_PATH, fl, as_attachment=True)
 
     return Response(status=404)
@@ -335,7 +351,7 @@ def uploadzone_upload():
 
 if __name__ == "__main__":
     host = socket.gethostbyname(socket.gethostname())
-    port = 1999
+    port = cfg.DEFAULT_PORT
     if len(sys.argv) == 2:
         host = sys.argv[1]
     elif len(sys.argv) == 3:

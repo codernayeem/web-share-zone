@@ -1,9 +1,10 @@
 from pathlib import Path
 from os import listdir
-from os.path import join, sep, isfile, getctime, getsize
+from os.path import join, isfile, isdir, getctime, getsize
 from datetime import datetime
 from random import randint
 import time, base64, config as cfg
+from distutils import dir_util
 
 
 def get_polished_datetime(date_time_object):
@@ -23,16 +24,13 @@ def get_polished_datetime(date_time_object):
 def get_icon(extension, file_type=None):
     icon = cfg.file_type_icon.get(file_type)
     if not icon:
-        icon = cfg.file_type_icon.get(extension)
-    if icon:
-        return icon
-    return cfg.file_type_icon['default']
+        icon = cfg.file_type_icon.get(extension, cfg.file_type_icon['default'])
+    return icon
 
 
 def create_share_zone_file(sharezone_id, fl):
-    pth = Path(cfg.SHAREZONE_ZONE_PATH)
-    if not pth.exists():
-        create_folder(pth)
+    if not Path(cfg.SHAREZONE_ZONE_PATH).exists():
+        create_folder(cfg.SHAREZONE_ZONE_PATH)
     try:
         fl.save(join(cfg.SHAREZONE_ZONE_PATH, str(sharezone_id)))
         return True
@@ -41,15 +39,7 @@ def create_share_zone_file(sharezone_id, fl):
 
 
 def create_folder(pth):
-    if pth:
-        pth = str(pth)
-        s = ''
-        for i in pth.split(sep):
-            s = join(s, i)
-            try:
-                Path(s).mkdir()
-            except:
-                pass
+    dir_util.mkpath(str(pth))
 
 
 def get_filename_extension(filename):
@@ -81,13 +71,6 @@ def get_file_content(pth):
         return open(pth, 'r').read()
     except:
         return None
-
-
-def is_valid_file(fl):
-    if fl:
-        p = Path(fl)
-        return p.exists() and p.is_file()
-    return False
 
 
 def get_formatted_datetime(format):
@@ -151,7 +134,7 @@ def get_downloadzone_single_file(pth, filename):
     if not pth.exists():
         create_folder(pth)
 
-    elif filename and is_valid_file(join(pth, filename)):
+    elif filename and isfile(join(pth, filename)):
         data_dir = join(pth, filename)
         data = {}
         data['name'] = filename

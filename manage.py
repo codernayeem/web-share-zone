@@ -1,3 +1,8 @@
+# instructions
+# python manage.py init          |   Create database
+# python manage.py createadmin   |   Create Admin Account
+# python manage.py createuser    |   Create Normal User Account
+
 import sys
 from app import db, app, User
 from getpass import getpass
@@ -45,4 +50,11 @@ if len(sys.argv) > 1:
     else:
         print('[+] - Please, give valid a command')
 else:
-    print('[+] - Please, give a command')
+    print('''
+[+] - Please, give a command from below :
+  ==> Create database :
+    - python manage.py init
+  ==> Create Admin Account :
+    - python manage.py createadmin
+  ==> Create Normal User Account :
+    - python manage.py createuser''')
